@@ -211,6 +211,14 @@ You will create a new branch for each issue you work on. Doing all your work on 
    git checkout -b your-branch-name
    ```
 
+### **3.2.1 Check for and resolve code errors before making changes**
+
+Before you begin working on any part of a file, always check for existing code errors in the codebase. This helps prevent introducing new issues and ensures a stable foundation for your work.
+
+- Use your code editor's error checking tools or run the appropriate linting/compilation commands (e.g., `yarn lint`, `npm run lint`, or your IDE's error panel) to identify any errors in the files you plan to edit.
+- Resolve any errors you find before proceeding with your changes. If you are unsure how to fix an error, ask for help in the team Slack channel or consult the documentation.
+- Only begin implementing new features or fixes after confirming the file is error-free.
+
 ### **3.3 Work on the Issue**
 
 Every issue will contain action items you must complete before you are ready to submit a pull request. Be sure to use the checkboxes as you complete each action item so we can track your progress!

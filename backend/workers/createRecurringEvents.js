@@ -1,4 +1,5 @@
 const { generateEventData } = require('./lib/generateEventData');
+const { getLAComponents, getLADayOfWeek, laWallClockToUTC, isSameLADate } = require('./lib/timezone-utils');
 
 //API CALLS to GET and POST
 /** GET
@@ -47,17 +48,13 @@ const createEvents = async (eventArray, URL, headerToSend, fetch) => {
 };
 
 /**
- * Checks if two dates are on the same day in UTC.
+ * Checks if two dates are on the same day in Los Angeles timezone.
  * @param {Date} eventDate - Event date.
- * @param {Date} todayDate - Today's data.
- * @returns {boolean} - True if both dates are on the same UTC day.
+ * @param {Date} todayDate - Today's date.
+ * @returns {boolean} - True if both dates are on the same LA calendar day.
  */
 const isSameUTCDate = (eventDate, todayDate) => {
-  return (
-    eventDate.getUTCFullYear() === todayDate.getUTCFullYear() &&
-    eventDate.getUTCMonth() === todayDate.getUTCMonth() &&
-    eventDate.getUTCDate() === todayDate.getUTCDate()
-  );
+  return isSameLADate(eventDate, todayDate);
 };
 
 /**
@@ -73,21 +70,28 @@ const doesEventExist = (recurringEventName, today, events) =>
   });
 
 /**
- * Adjusts an event date to Los_Angeles time, accounting for DST offsets.
- * @param {Date} eventDate - The event date to adjust.
- * @returns {Date} - The adjusted event date.
+ * Extracts the LA wall-clock time from a stored event timestamp and
+ * returns the correct UTC Date for that wall-clock time on today's LA date.
+ * @param {Date|string} eventDate - The stored event date (contains the intended LA time).
+ * @returns {Date} - The correct UTC Date for today's occurrence of that LA time.
  */
 const adjustToLosAngelesTime = (eventDate) => {
-  const tempDate = new Date(eventDate);
-  const losAngelesOffsetHours = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Los_Angeles',
-    timeZoneName: 'shortOffset',
-  })
-    .formatToParts(tempDate)
-    .find((part) => part.type === 'timeZoneName')
-    .value.slice(3);
-  const offsetMinutes = parseInt(losAngelesOffsetHours, 10) * 60;
-  return new Date(tempDate.getTime() + offsetMinutes * 60000);
+  const d = new Date(eventDate);
+  // Extract the LA wall-clock hour/minute from the stored event
+  const eventLA = getLAComponents(d);
+
+  // Get today's LA date
+  const todayLA = getLAComponents(new Date());
+
+  // Combine today's LA date with the event's LA time → correct UTC
+  return laWallClockToUTC(
+    todayLA.year,
+    todayLA.month,
+    todayLA.day,
+    eventLA.hour,
+    eventLA.minute,
+    eventLA.second,
+  );
 };
 
 /**
@@ -102,38 +106,16 @@ const adjustToLosAngelesTime = (eventDate) => {
  */
 const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend, fetch) => {
   const today = new Date();
-  const todayUTCDay = today.getUTCDay();
-  //2025-11-25
-  // const allLocalDays = [];
-  // const dateCheck = [];
-  // const eventNameExist = [];
-  // // filter recurring events for today and not already existing
+  const todayLADay = getLADayOfWeek(today);
+
   const eventsToCreate = recurringEvents?.filter((recurringEvent) => {
-    // we're converting the stored UTC event date to local time to compare the system DOW with the event DOW
-    const localEventDate = adjustToLosAngelesTime(recurringEvent.date);
-    //Logs for checking
-    // allLocalDays.push(localEventDate.getUTCDay());
-    // dateCheck.push(localEventDate.getUTCDay() === todayUTCDay);
-    // eventNameExist.push(!doesEventExist(recurringEvent.name, today, events));
+    // Get the event's day-of-week in LA timezone
+    const eventLADay = getLADayOfWeek(new Date(recurringEvent.date));
     return (
-      localEventDate.getUTCDay() === todayUTCDay &&
+      eventLADay === todayLADay &&
       !doesEventExist(recurringEvent.name, today, events)
     );
   });
-  // console.log(
-  //   'Event date\n',
-  //   today,
-  //   '\nToday\n',
-  //   todayUTCDay,
-  //   '\nAll days\n',
-  //   allLocalDays,
-  //   '\nDay vs All Days comparison (Bool)\n',
-  //   dateCheck,
-  //   '\nEvent exist or not (Bool)\n',
-  //   eventNameExist,
-  //   '\nList of events to create\n',
-  //   eventsToCreate,
-  // );
 
   //Check if event exists
   if (!eventsToCreate || eventsToCreate?.length === 0) {
@@ -141,11 +123,10 @@ const filterAndCreateEvents = async (events, recurringEvents, URL, headerToSend,
   } else {
     const batchEvents = [];
     for (const event of eventsToCreate) {
-      // convert to local time for DST correction...
+      // Compute correct UTC start time for today's occurrence
       const correctedStartTime = adjustToLosAngelesTime(event.startTime);
       const timeCorrectedEvent = {
         ...event,
-        // ... then back to UTC for DB
         date: correctedStartTime.toISOString(),
         startTime: correctedStartTime.toISOString(),
       };

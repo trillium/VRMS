@@ -54,10 +54,12 @@ module.exports = (cron, fetch) => {
           // false meaning don't include in sortedEvents
           return false;
         }
-        // Calculate three hours from now
-        const threeHoursFromStartTime = new Date(event.date).getTime() + 10800000;
-        if (Number.isNaN(threeHoursFromStartTime)) return false;
-        return now >= threeHoursFromStartTime && event.checkInReady === true;
+        // Use endTime if available, fall back to 3hr after start for legacy events
+        const closeTime = event.endTime
+          ? new Date(event.endTime).getTime()
+          : new Date(event.date).getTime() + 10800000;
+        if (Number.isNaN(closeTime)) return false;
+        return now >= closeTime && event.checkInReady === true;
       });
 
       // console.log('Sorted events: ', sortedEvents);

@@ -1,22 +1,10 @@
 function generateEventData(eventObj, TODAY_DATE = new Date()) {
     /**
      * Generates event data based on the provided event object and date.
-     * In the cron job this function normally runs in, it is expected that eventObj.date is the same as TODAY_DATE.
+     * eventObj.startTime is expected to be a correct UTC ISO string for today's occurrence.
      */
-    const eventDate = new Date(eventObj.startTime);
-    // Create new event
-    const hours = eventDate.getHours();
-    const minutes = eventDate.getMinutes();
-    const seconds = eventDate.getSeconds();
-    const milliseconds = eventDate.getMilliseconds();
-
-    const yearToday = TODAY_DATE.getFullYear();
-    const monthToday = TODAY_DATE.getMonth();
-    const dateToday = TODAY_DATE.getDate();
-
-    const newEventDate = new Date(yearToday, monthToday, dateToday, hours, minutes, seconds, milliseconds);
-
-    const newEndTime = new Date(yearToday, monthToday, dateToday, hours + eventObj.hours, minutes, seconds, milliseconds)
+    const startTime = new Date(eventObj.startTime);
+    const endTime = new Date(startTime.getTime() + (eventObj.hours || 0) * 3600000);
 
     const eventToCreate = {
         name: eventObj.name && eventObj.name,
@@ -24,12 +12,12 @@ function generateEventData(eventObj, TODAY_DATE = new Date()) {
         eventType: eventObj.eventType && eventObj.eventType,
         description: eventObj.eventDescription && eventObj.eventDescription,
         project: eventObj.project && eventObj.project,
-        date: eventObj.date && newEventDate,
-        startTime: eventObj.startTime && newEventDate,
-        endTime: eventObj.endTime && newEndTime,
+        date: eventObj.date && startTime,
+        startTime: eventObj.startTime && startTime,
+        endTime: eventObj.endTime && endTime,
         hours: eventObj.hours && eventObj.hours
     }
-    
+
     if (eventObj.hasOwnProperty("location")) {
         eventToCreate.location = {
             city: eventObj.location.city ? eventObj.location.city : 'REMOTE',

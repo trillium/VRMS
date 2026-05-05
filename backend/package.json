@@ -35,7 +35,8 @@
     "prettier": "^2.1.1",
     "pretty-quick": "^3.0.2",
     "supertest": "^4.0.2",
-    "why-is-node-running": "^2.2.0"
+    "why-is-node-running": "^2.2.0",
+    "swagger-autogen": "^2.23.7"
   },
   "dependencies": {
     "@slack/bolt": "^2.2.3",
@@ -57,7 +58,6 @@
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.1",
-    "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"
   },
   "directories": {

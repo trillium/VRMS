@@ -10,6 +10,7 @@
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.16.7",
     "@mui/x-date-pickers": "^7.21.0",
+    "@tailwindcss/postcss": "4.3.5",
     "@tailwindcss/vite": "^4.3.5",
     "@vitejs/plugin-react": "^4.4.1",
     "@vitejs/plugin-react-swc": "^3.10.1",
@@ -25,6 +26,7 @@
     "minimist": "^1.2.6",
     "moment": "^2.29.2",
     "moment-recur": "^1.0.7",
+    "next": "16.4.6",
     "posthog-js": "^1.360.2",
     "react": "^18.2.0",
     "react-datepicker": "^4.16.0",
@@ -39,8 +41,11 @@
   "scripts": {
     "vite": "vite",
     "dev": "vite",
+    "dev:next": "next dev",
     "start": "dotenv -e .env -e ../backend/.env -- cross-var cross-env PORT=%CLIENT_PORT% vite",
-    "build": "vite build",
+    "start:next": "node .next/standalone/client/server.js",
+    "build": "next build",
+    "build:vite": "vite build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
@@ -53,6 +58,7 @@
   "author": "sarL3y",
   "license": "ISC",
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^10.3.2",
     "@testing-library/react": "^16.0.0",
     "@types/d3": "5",
@@ -66,6 +72,6 @@
     "vitest": "^3.2.6"
   },
   "engines": {
-    "node": "<=18.0.0"
+    "node": ">=20.9.0"
   }
 }

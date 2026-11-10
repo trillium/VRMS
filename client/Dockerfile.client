@@ -14,7 +14,7 @@ COPY --from=client-development /srv/client/node_modules node_modules
 COPY client/. .
 COPY shared/ /srv/shared/
 USER root
-RUN npm run build
+RUN npm run build:vite
 
 FROM nginx AS client-production
 EXPOSE 3000

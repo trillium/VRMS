@@ -4,6 +4,7 @@ import { ROLES } from '@shared/roles';
 import { NavLink, withRouter } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import HflaImg from '../svg/hflalogo.svg';
+import { assetUrl } from '../utils/assetUrl';
 import theme from '../theme';
 
 const Navbar = () => {
@@ -31,7 +32,7 @@ const Navbar = () => {
       <Grid container>
         <Grid item>
           <NavLink to={loggedIn() ? '/welcome' : '/'}>
-            <Box component="img" src={HflaImg} sx={{ width: '48.3px', mt: '7px' }} />
+            <Box component="img" src={assetUrl(HflaImg)} sx={{ width: '48.3px', mt: '7px' }} />
           </NavLink>
         </Grid>
         <Grid

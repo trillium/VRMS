@@ -1,8 +1,7 @@
+import { getWorkerApiBaseUrl } from './lib/apiBaseUrl.js';
+
 export default (cron, fetch) => {
-  const url =
-    process.env.NODE_ENV === 'prod'
-      ? 'https://www.vrms.io'
-      : `http://localhost:${process.env.BACKEND_PORT}`;
+  const url = getWorkerApiBaseUrl();
   const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
   async function fetchEvents() {

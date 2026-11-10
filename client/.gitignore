@@ -11,6 +11,9 @@
 
 # production
 /build
+/.next
+/out
+next-env.d.ts
 
 # misc
 .DS_Store
@@ -25,3 +28,4 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+*.tsbuildinfo

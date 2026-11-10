@@ -1,0 +1,81 @@
+# Proof-of-concept stack: Next.js frontend + Express backend + throwaway Mongo,
+# behind an nginx front proxy that stands in for the AWS ALB.
+# NOT for production and not for Hack for LA's AWS deploy. Every secret below is a dummy.
+#
+# Build context is the repo root because both Dockerfiles COPY shared/.
+#
+#   CUSTOM_REQUEST_HEADER="$(awk -F'"' '{print $2}' client/src/utils/globalSettings.js)" \
+#   POC_PORT=18090 docker compose -f docker-compose.poc.yml up -d --build
+#
+# CUSTOM_REQUEST_HEADER must equal the value baked into the client bundle
+# (client/src/utils/globalSettings.js), or every /api call from the SPA gets a 401.
+# Tear down (removes only this project's containers, network and images):
+#   docker compose -f docker-compose.poc.yml down -v --rmi local
+name: vrms-next-poc
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: vrms-next-poc-mongo
+    restart: unless-stopped
+    # Throwaway data: nothing is kept after `down`, and no anonymous volumes are left behind.
+    tmpfs:
+      - /data/db
+      - /data/configdb
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.prod
+      args:
+        BUILD_SHA: ${BUILD_SHA:-poc}
+    image: vrms-next-poc-backend:${BUILD_SHA:-poc}
+    container_name: vrms-next-poc-backend
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      # NODE_ENV=prod makes the cron workers use their "production" base URL.
+      # WORKER_API_BASE_URL points that at this stack so they never call https://www.vrms.io.
+      NODE_ENV: prod
+      WORKER_API_BASE_URL: http://backend:4000
+      BACKEND_PORT: "4000"
+      REACT_APP_PROXY: http://backend:4000
+      DATABASE_URL: mongodb://mongo:27017/vrms-next-poc
+      JWT_SECRET: poc-dummy-jwt-secret-not-for-real-use
+      CUSTOM_REQUEST_HEADER: ${CUSTOM_REQUEST_HEADER:?set it to the value in client/src/utils/globalSettings.js}
+      # Dummy values: assertEnv in backend/app.js only checks that these are set.
+      SLACK_OAUTH_TOKEN: dummy
+      SLACK_BOT_TOKEN: dummy
+      SLACK_TEAM_ID: dummy
+      SLACK_CHANNEL_ID: dummy
+      SLACK_CLIENT_ID: dummy
+      SLACK_CLIENT_SECRET: dummy
+      SLACK_SIGNING_SECRET: dummy
+      GMAIL_CLIENT_ID: dummy
+      GMAIL_SECRET_ID: dummy
+      GMAIL_REFRESH_TOKEN: dummy
+      GMAIL_EMAIL: poc@example.invalid
+      MAILHOG_PORT: "1025"
+      MAILHOG_USER: dummy
+      MAILHOG_PASSWORD: dummy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: client/Dockerfile.next
+    image: vrms-next-poc-frontend:${BUILD_SHA:-poc}
+    container_name: vrms-next-poc-frontend
+    restart: unless-stopped
+
+  proxy:
+    image: nginx:alpine
+    container_name: vrms-next-poc-proxy
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx/poc.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "${POC_PORT:-18090}:80"

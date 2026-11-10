@@ -1,3 +1,4 @@
+import { getWorkerApiBaseUrl } from './lib/apiBaseUrl.js';
 import { generateEventData } from './lib/generateEventData.js';
 
 //API CALLS to GET and POST
@@ -117,10 +118,7 @@ const scheduleTask = (cron, fetch, URL, headerToSend) => {
 };
 
 const createRecurringEvents = (cron, fetch) => {
-  const URL =
-    process.env.NODE_ENV === 'prod'
-      ? 'https://www.vrms.io'
-      : `http://localhost:${process.env.BACKEND_PORT}`;
+  const URL = getWorkerApiBaseUrl();
   const headerToSend = process.env.CUSTOM_REQUEST_HEADER;
 
   return scheduleTask(cron, fetch, URL, headerToSend);

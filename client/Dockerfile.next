@@ -1,0 +1,37 @@
+# Next.js frontend (standalone server on :3000). Proof of concept: the existing
+# React Router app is mounted by a client-only catch-all route in client/app/.
+#
+# Build context is the REPO ROOT, because the app imports shared/ (see
+# docker-compose.poc.yml):
+#   docker build -f client/Dockerfile.next -t vrms-next .
+# Unlike Dockerfile.prod this installs from client/yarn.lock, so the image is reproducible.
+FROM node:24-alpine AS deps
+WORKDIR /srv/client
+COPY client/package.json client/yarn.lock ./
+RUN yarn install --frozen-lockfile --network-timeout 300000
+
+FROM node:24-alpine AS builder
+WORKDIR /srv/client
+ENV NEXT_TELEMETRY_DISABLED=1
+# Next inlines NEXT_PUBLIC_* into the browser bundle at build time.
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
+COPY --from=deps /srv/client/node_modules ./node_modules
+COPY client/. .
+COPY shared/ /srv/shared/
+RUN yarn build
+
+FROM node:24-alpine AS runner
+# next.config.mjs sets outputFileTracingRoot to the repo root, so the standalone
+# server is written to .next/standalone/client/server.js.
+WORKDIR /srv
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
+COPY --from=builder --chown=node:node /srv/client/.next/standalone ./
+COPY --from=builder --chown=node:node /srv/client/.next/static ./client/.next/static
+COPY --from=builder --chown=node:node /srv/client/public ./client/public
+USER node
+EXPOSE 3000
+CMD ["node", "client/server.js"]

@@ -1,0 +1,20 @@
+vrms-next-poc-proxy	8.129MiB / 15.53GiB
+vrms-next-poc-backend	174.3MiB / 15.53GiB
+vrms-next-poc-mongo	468.5MiB / 15.53GiB
+vrms-next-poc-frontend	49.58MiB / 15.53GiB
+---
+NODE_ENV=prod WORKER_API_BASE_URL=http://backend:4000
+vrms.io mentions in backend logs: 0
+added 'user' to roles collection
+added 'moderator' to roles collection
+[0mGET /api/healthcheck [32m200[0m 4.091 ms - 96[0m
+[0mGET /api/events [32m200[0m 38.251 ms - 2[0m
+[0mGET /api/projects [32m200[0m 2.545 ms - 2[0m
+[0mGET /api/nope [33m404[0m 0.761 ms - 871[0m
+REQUEST SHOULD CONTAIN CUSTOM HEADER BUT IT ISN'T FOUND
+[0mGET /api/events [33m401[0m 0.436 ms - 12[0m
+- Network:       http://0.0.0.0:3000
+✓ Ready in 0ms
+✓ Running next.config took 4ms
+vrms-next-poc-backend:3f6ed934                 b4eee194fdc0       1.07GB          223MB   U    
+vrms-next-poc-frontend:3f6ed934                2b39c1b7357c        328MB         84.8MB   U    

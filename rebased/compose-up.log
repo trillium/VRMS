@@ -1,0 +1,230 @@
+ Image vrms-next-poc-backend:3f6ed934 Building 
+ Image vrms-next-poc-frontend:3f6ed934 Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.10kB done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile.next
+#2 transferring dockerfile: 35B
+#2 transferring dockerfile: 1.49kB done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile.prod
+#3 transferring dockerfile: 592B done
+#3 DONE 0.1s
+
+#4 [backend internal] load metadata for docker.io/library/node:24-slim
+#4 DONE 0.7s
+
+#5 [backend internal] load metadata for docker.io/library/node:24
+#5 DONE 0.7s
+
+#6 [backend internal] load .dockerignore
+#6 transferring context: 341B done
+#6 DONE 0.0s
+
+#7 [backend internal] load build context
+#7 DONE 0.0s
+
+#8 [backend api-builder 1/8] FROM docker.io/library/node:24@sha256:8fa96264f302f58bbb13aa7339c541547b56975766ce956c875da149452a3e40
+#8 resolve docker.io/library/node:24@sha256:8fa96264f302f58bbb13aa7339c541547b56975766ce956c875da149452a3e40 0.0s done
+#8 DONE 0.1s
+
+#9 [backend api-production 1/6] FROM docker.io/library/node:24-slim@sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9
+#9 resolve docker.io/library/node:24-slim@sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9
+#9 resolve docker.io/library/node:24-slim@sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9 0.0s done
+#9 DONE 0.1s
+
+#7 [backend internal] load build context
+#7 transferring context: 592.35kB 0.0s done
+#7 DONE 0.1s
+
+#10 [backend api-production 4/6] COPY --from=api-builder /srv/shared/ /srv/shared/
+#10 CACHED
+
+#11 [backend api-builder 2/8] RUN mkdir /srv/backend
+#11 CACHED
+
+#12 [backend api-builder 6/8] RUN yarn install --pure-lockfile
+#12 CACHED
+
+#13 [backend api-builder 5/8] COPY backend/package.json backend/yarn.lock ./
+#13 CACHED
+
+#14 [backend api-builder 8/8] COPY shared/ /srv/shared/
+#14 CACHED
+
+#15 [backend api-production 3/6] COPY --from=api-builder /srv/backend/node_modules ./node_modules
+#15 CACHED
+
+#16 [backend api-builder 3/8] WORKDIR /srv/backend
+#16 CACHED
+
+#17 [backend api-builder 4/8] RUN mkdir -p node_modules
+#17 CACHED
+
+#18 [backend api-production 2/6] WORKDIR /srv/backend
+#18 CACHED
+
+#19 [backend api-builder 7/8] COPY backend/. .
+#19 CACHED
+
+#20 [backend api-production 5/6] COPY backend/. .
+#20 CACHED
+
+#21 [backend api-production 6/6] RUN echo "3f6ed934" > BUILD_INFO
+#21 DONE 0.5s
+
+#22 [frontend internal] load metadata for docker.io/library/node:24-alpine
+#22 DONE 1.6s
+
+#23 [backend] exporting to image
+#23 exporting layers 0.1s done
+#23 exporting manifest sha256:cff09c3244c4ac7d3c5f5352bb46a75fbb18a6326149d8cf1616cb9d4c463435 0.0s done
+#23 exporting config sha256:fe025a76448e9b519ce8efedbd719c452d0e094177ee502221765edfc7708ba2 0.0s done
+#23 exporting attestation manifest sha256:f0a581ee4d5db142a2c5d172bd31ff23f303696b22294c451cc4f7f94f58b6e6 0.0s done
+#23 exporting manifest list sha256:b4eee194fdc0c88bfa3b994ffec7ffd89e136408f82d72df5bf171466ba6e243 0.0s done
+#23 naming to docker.io/library/vrms-next-poc-backend:3f6ed934 done
+#23 unpacking to docker.io/library/vrms-next-poc-backend:3f6ed934
+#23 ...
+
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 341B done
+#6 DONE 0.0s
+
+#24 [frontend deps 1/4] FROM docker.io/library/node:24-alpine@sha256:a34ab6d7f6f4813f4d0c5469d74685604b962fbdbf5793a7bc7b4998ecb867c8
+#24 resolve docker.io/library/node:24-alpine@sha256:a34ab6d7f6f4813f4d0c5469d74685604b962fbdbf5793a7bc7b4998ecb867c8 0.0s done
+#24 DONE 0.0s
+
+#25 [frontend internal] load build context
+#25 transferring context: 2.45MB 0.1s done
+#25 DONE 0.1s
+
+#26 [frontend deps 2/4] WORKDIR /srv/client
+#26 CACHED
+
+#27 [frontend deps 3/4] COPY client/package.json client/yarn.lock ./
+#27 DONE 0.2s
+
+#23 [backend] exporting to image
+#23 ...
+
+#28 [frontend deps 4/4] RUN yarn install --frozen-lockfile --network-timeout 300000
+#28 0.692 yarn install v1.22.22
+#28 0.716 (node:1) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+#28 0.716 (Use `node --trace-deprecation ...` to show where the warning was created)
+#28 0.797 [1/5] Validating package.json...
+#28 0.802 [2/5] Resolving packages...
+#28 1.166 [3/5] Fetching packages...
+#28 ...
+
+#23 [backend] exporting to image
+#23 unpacking to docker.io/library/vrms-next-poc-backend:3f6ed934 8.0s done
+#23 DONE 8.2s
+
+#28 [frontend deps 4/4] RUN yarn install --frozen-lockfile --network-timeout 300000
+#28 ...
+
+#29 [backend] resolving provenance for metadata file
+#29 DONE 0.0s
+
+#28 [frontend deps 4/4] RUN yarn install --frozen-lockfile --network-timeout 300000
+#28 99.53 [4/5] Linking dependencies...
+#28 99.53 warning " > @babel/plugin-transform-react-jsx-self@7.24.6" has unmet peer dependency "@babel/core@^7.0.0-0".
+#28 99.54 warning " > @mui/x-date-pickers@7.22.1" has unmet peer dependency "@mui/system@^5.15.14 || ^6.0.0".
+#28 99.54 warning " > autoprefixer@10.4.21" has unmet peer dependency "postcss@^8.1.0".
+#28 126.6 [5/5] Building fresh packages...
+#28 127.7 Done in 127.04s.
+#28 DONE 131.4s
+
+#30 [frontend builder 3/6] COPY --from=deps /srv/client/node_modules ./node_modules
+#30 DONE 14.7s
+
+#31 [frontend builder 4/6] COPY client/. .
+#31 DONE 3.5s
+
+#32 [frontend builder 5/6] COPY shared/ /srv/shared/
+#32 DONE 0.2s
+
+#33 [frontend builder 6/6] RUN yarn build
+#33 0.466 yarn run v1.22.22
+#33 0.482 (node:1) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+#33 0.482 (Use `node --trace-deprecation ...` to show where the warning was created)
+#33 0.497 $ next build
+#33 1.098 ▲ Next.js 16.4.6 (Turbopack)
+#33 1.147 ⚠ React 18 support is deprecated in Next.js 16 and will be removed in Next.js 17. Please upgrade to React 19. Learn more: https://nextjs.org/docs/messages/react-version
+#33 1.147 ✓ Running next.config.mjs took 47ms
+#33 1.185 
+#33 1.216   Creating an optimized production build ...
+#33 7.921 Browserslist: caniuse-lite is outdated. Please run:
+#33 7.921   npx update-browserslist-db@latest
+#33 7.921   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+#33 13.34 ✓ Compiled successfully in 12.1s
+#33 13.35   Running TypeScript ...
+#33 15.67   Finished TypeScript in 2.3s ...
+#33 15.68   Collecting page data using 3 workers ...
+#33 16.54   Generating static pages using 3 workers (0/2) ...
+#33 16.74 ✓ Generating static pages using 3 workers (2/2) in 199ms
+#33 16.75   Finalizing page optimization ...
+#33 17.73 
+#33 17.74 Route (app)
+#33 17.74 ┌ ○ /_not-found
+#33 17.74 └ ƒ /[[...slug]]
+#33 17.74 
+#33 17.74 
+#33 17.74 ○  (Static)   prerendered as static content
+#33 17.74 ƒ  (Dynamic)  server-rendered on demand
+#33 17.74 
+#33 17.89 Done in 17.42s.
+#33 DONE 18.1s
+
+#34 [frontend runner 2/5] WORKDIR /srv
+#34 CACHED
+
+#35 [frontend runner 3/5] COPY --from=builder --chown=node:node /srv/client/.next/standalone ./
+#35 DONE 3.2s
+
+#36 [frontend runner 4/5] COPY --from=builder --chown=node:node /srv/client/.next/static ./client/.next/static
+#36 DONE 0.1s
+
+#37 [frontend runner 5/5] COPY --from=builder --chown=node:node /srv/client/public ./client/public
+#37 DONE 0.1s
+
+#38 [frontend] exporting to image
+#38 exporting layers
+#38 exporting layers 4.6s done
+#38 exporting manifest sha256:e0a9cb7c74c0da172e930253d979d62a048d4af7c21e2e0dd21d8acd9c0863a3
+#38 exporting manifest sha256:e0a9cb7c74c0da172e930253d979d62a048d4af7c21e2e0dd21d8acd9c0863a3 0.5s done
+#38 exporting config sha256:4213d05d5af41821795ae5de2c57110e66aec6113666e57cbe4e9b0d253ddd3d
+#38 exporting config sha256:4213d05d5af41821795ae5de2c57110e66aec6113666e57cbe4e9b0d253ddd3d 0.2s done
+#38 exporting attestation manifest sha256:780683e85c543fa50a926c9ae674691c067d98d1a9f071b9a64a36a9df69ac07 0.0s done
+#38 exporting manifest list sha256:2b39c1b7357c767bdee1579c8622e50ab03cc960312f402cd089203307a87023 0.0s done
+#38 naming to docker.io/library/vrms-next-poc-frontend:3f6ed934 done
+#38 unpacking to docker.io/library/vrms-next-poc-frontend:3f6ed934
+#38 unpacking to docker.io/library/vrms-next-poc-frontend:3f6ed934 0.6s done
+#38 DONE 5.9s
+
+#39 [frontend] resolving provenance for metadata file
+#39 DONE 0.1s
+ Image vrms-next-poc-backend:3f6ed934 Built 
+ Image vrms-next-poc-frontend:3f6ed934 Built 
+ Network vrms-next-poc_default Creating 
+ Network vrms-next-poc_default Creating 
+ Network vrms-next-poc_default Created 
+ Network vrms-next-poc_default Created 
+ Container vrms-next-poc-frontend Creating 
+ Container vrms-next-poc-mongo Creating 
+ Container vrms-next-poc-mongo Created 
+ Container vrms-next-poc-backend Creating 
+ Container vrms-next-poc-frontend Created 
+ Container vrms-next-poc-backend Created 
+ Container vrms-next-poc-proxy Creating 
+ Container vrms-next-poc-proxy Created 
+ Container vrms-next-poc-mongo Starting 
+ Container vrms-next-poc-frontend Starting 
+ Container vrms-next-poc-mongo Started 
+ Container vrms-next-poc-backend Starting 
+ Container vrms-next-poc-frontend Started 
+ Container vrms-next-poc-backend Started 
+ Container vrms-next-poc-proxy Starting 
+ Container vrms-next-poc-proxy Started 

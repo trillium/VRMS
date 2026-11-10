@@ -1,0 +1,17 @@
+/ -> 200
+/events -> 200
+/event/123 -> 200
+/login -> 200
+/projects/abc -> 200
+/healthcheck -> 200
+/no/such/page -> 200
+/favicon.ico -> 200
+/manifest.json -> 200
+--- api
+/api/healthcheck -> I'm Alive! Build: 3f6ed934 | Built: 2026-11-10T20:56:44.315Z | Checked: 2026-11-10T20:56:55.323Z [200]
+/api/events -> [] [200]
+/api/projects -> [] [200]
+/api/nope -> {"error":{"status":404,"message":"Not Found","stack":"Error: Not Found\n    at file:///srv/backend/app.js:143:17\n    at Layer.handle [as handle_request] (/srv/
+events no header -> 401
+--- shell html
+<title>VRMS</title>

@@ -1,0 +1,20 @@
+# smoke from mini1 over the tailnet against http://lnx:18090 at 2026-11-10T04:49:12Z
+GET /                      200 text/html; charset=utf-8 6788B
+GET /events                200 text/html; charset=utf-8 6800B
+GET /event/123             200 text/html; charset=utf-8 6810B
+GET /login                 200 text/html; charset=utf-8 6798B
+GET /projects/abc          200 text/html; charset=utf-8 6816B
+GET /no/such/page          200 text/html; charset=utf-8 6820B
+GET /favicon.ico           200 image/x-icon 1150B
+GET /manifest.json         200 application/json; charset=UTF-8 597B
+GET /bg-image-skyline.webp 200 image/webp 466676B
+
+-- static asset referenced by home page
+GET /_next/static/chunks/0e0e07ov2dkqq.js 200 application/javascript; charset=UTF-8 21954B
+
+-- API through the same origin
+GET /api/healthcheck: I'm Alive! Build: d2dfc4a6 | Built: 2026-11-10T04:49:02.895Z | Checked: 2026-11-10T04:49:13.339Z [200]
+GET /api/events (with header): [] [200]
+GET /api/events (no header): [401]
+GET /api/projects (with header): [] [200]
+GET /api/nope (404 from Express, not the SPA): [404 application/json; charset=utf-8]

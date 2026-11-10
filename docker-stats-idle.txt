@@ -1,0 +1,23 @@
+2026-11-10T04:50:17Z
+NAME                     MEM USAGE / LIMIT     MEM %     CPU %     PIDS
+vrms-next-poc-proxy      9.977MiB / 15.53GiB   0.06%     0.00%     5
+vrms-next-poc-backend    180.4MiB / 15.53GiB   1.13%     0.23%     23
+vrms-next-poc-mongo      582.2MiB / 15.53GiB   3.66%     0.96%     45
+vrms-next-poc-frontend   42.52MiB / 15.53GiB   0.27%     0.00%     11
+
+REPOSITORY:TAG                    SIZE      IMAGE ID
+vrms-next-poc-frontend:d2dfc4a6   328MB     6cba7749c19a
+vrms-next-poc-backend:d2dfc4a6    1.07GB    933a68bd7205
+docker: 'docker images' requires at most 1 argument
+
+Usage:  docker images [OPTIONS] [REPOSITORY[:TAG]]
+
+Run 'docker images --help' for more information
+
+frontend node RSS:
+PID   RSS  COMMAND
+    1  96m next-server (v16.4.6)
+   19  924 sh -c ps -o pid,rss,args 2>/dev/null | head; node -v
+   25  848 ps -o pid,rss,args
+   26  772 head
+v24.22.2

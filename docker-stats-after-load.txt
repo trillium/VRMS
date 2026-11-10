@@ -1,0 +1,13 @@
+-- 600 page requests, 10 parallel, through the proxy (HTML shell + deep links)
+
+real	0m7.417s
+user	0m4.798s
+sys	0m5.280s
+NAME                     MEM USAGE / LIMIT     MEM %     CPU %     PIDS
+vrms-next-poc-proxy      10.33MiB / 15.53GiB   0.06%     0.00%     5
+vrms-next-poc-backend    181MiB / 15.53GiB     1.14%     0.69%     23
+vrms-next-poc-mongo      581.9MiB / 15.53GiB   3.66%     1.02%     45
+vrms-next-poc-frontend   167MiB / 15.53GiB     1.05%     0.00%     11
+PID   RSS  COMMAND
+    1 216m next-server (v16.4.6)
+   27  832 sh -c ps -o pid,rss,args | head -3
